@@ -34,15 +34,17 @@ tmux_conf_new_pane_reconnect_ssh=false
 # prompt for session name when creating a new session, possible values are:
 #   - true
 #   - false (default)
-tmux_conf_new_session_prompt=false
+tmux_conf_new_session_prompt=true
 
+# prevents panes from renaming when changing directory
+set-option -g allow-rename off
 
 # -- display -------------------------------------------------------------------
 
 # RGB 24-bit colour support (tmux >= 2.2), possible values are:
 #  - true
 #  - false (default)
-tmux_conf_theme_24b_colour=false
+tmux_conf_theme_24b_colour=true
 
 # window style
 tmux_conf_theme_window_fg='default'
@@ -54,7 +56,7 @@ tmux_conf_theme_window_bg='default'
 tmux_conf_theme_highlight_focused_pane=false
 
 # focused pane colours:
-tmux_conf_theme_focused_pane_fg='default'
+tmux_conf_theme_focused_pane_fg='#0098d7'
 tmux_conf_theme_focused_pane_bg='#0087d7'               # light blue
 
 # pane border style, possible values are:
@@ -99,6 +101,7 @@ tmux_conf_theme_status_attr='none'
 #     - #{username}
 #     - #{username_ssh}
 tmux_conf_theme_terminal_title='#h ❐ #S ● #I #W'
+tmux_conf_theme_terminal_title='#{username}@#{hostname}'
 
 # window status style
 #   - built-in variables are:
@@ -123,7 +126,7 @@ tmux_conf_theme_window_status_format='#I #W'
 #     - #{hostname_ssh}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_window_status_current_fg='#000000'      # black
+tmux_conf_theme_window_status_current_fg='#DC143C'      # black
 tmux_conf_theme_window_status_current_bg='#00afff'      # light blue
 tmux_conf_theme_window_status_current_attr='bold'
 tmux_conf_theme_window_status_current_format='#I #W'
@@ -133,7 +136,7 @@ tmux_conf_theme_window_status_current_format='#I #W'
 # window activity status style
 tmux_conf_theme_window_status_activity_fg='default'
 tmux_conf_theme_window_status_activity_bg='default'
-tmux_conf_theme_window_status_activity_attr='underscore'
+tmux_conf_theme_window_status_activity_attr='blink'
 
 # window bell status style
 tmux_conf_theme_window_status_bell_fg='#ffff00'         # yellow
@@ -141,19 +144,20 @@ tmux_conf_theme_window_status_bell_bg='default'
 tmux_conf_theme_window_status_bell_attr='blink,bold'
 
 # window last status style
+#tmux_conf_theme_window_status_last_fg='#00afff'         # light blue
 tmux_conf_theme_window_status_last_fg='#00afff'         # light blue
 tmux_conf_theme_window_status_last_bg='default'
 tmux_conf_theme_window_status_last_attr='none'
 
 # status left/right sections separators
-tmux_conf_theme_left_separator_main=''
-tmux_conf_theme_left_separator_sub='|'
-tmux_conf_theme_right_separator_main=''
-tmux_conf_theme_right_separator_sub='|'
-#tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
-#tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
-#tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
-#tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
+#tmux_conf_theme_left_separator_main=''
+#tmux_conf_theme_left_separator_sub='|'
+#tmux_conf_theme_right_separator_main=''
+#tmux_conf_theme_right_separator_sub='|'
+tmux_conf_theme_left_separator_main='\uE0B0'  # /!\ you don't need to install Powerline
+tmux_conf_theme_left_separator_sub='\uE0B1'   #   you only need fonts patched with
+tmux_conf_theme_right_separator_main='\uE0B2' #   Powerline symbols or the standalone
+tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see README.md
 
 # status left/right content:
 #   - separate main sections with '|'
@@ -179,17 +183,22 @@ tmux_conf_theme_right_separator_sub='|'
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
-tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} '
-tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | #{hostname} '
+tmux_conf_theme_status_left=' ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} | #{loadavg} #{root} '
+#tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} #{?battery_status, #{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},} , %R , %d %b | #{username}#{root} | | #{hostname} '
+tmux_conf_theme_status_right='#{prefix}#{pairing}#{synchronized} %F %T (%A) | #{username}#{root} | #{hostname}'
 
 # status left style
-tmux_conf_theme_status_left_fg='#000000,#e4e4e4,#e4e4e4'  # black, white , white
-tmux_conf_theme_status_left_bg='#ffff00,#ff00af,#00afff'  # yellow, pink, white blue
+tmux_conf_theme_status_left_fg='#000000,#000000,#000000'  # black, white , white
+#tmux_conf_theme_status_left_bg='#ffff00,#ff00af,#00afff'  # yellow, pink, white blue
+#tmux_conf_theme_status_left_bg='#00afff,#55efff,#00afff'  # yellow, pink, white blue
+tmux_conf_theme_status_left_bg='#4169E1,#00BFFF,#7CFC00' # dark gray, red, white
 tmux_conf_theme_status_left_attr='bold,none,none'
 
 # status right style
-tmux_conf_theme_status_right_fg='#8a8a8a,#e4e4e4,#000000' # light gray, white, black
-tmux_conf_theme_status_right_bg='#080808,#d70000,#e4e4e4' # dark gray, red, white
+#tmux_conf_theme_status_right_fg='#8a8a8a,#e4e4e4,#000000' # light gray, white, black
+tmux_conf_theme_status_right_fg='#000000,#000000,#000000' # light gray, white, black
+#tmux_conf_theme_status_right_bg='#080808,#00afff,#e4e4e4' # dark gray, red, white
+tmux_conf_theme_status_right_bg='#7CFC00,#00BFFF,#4169E1' # dark gray, red, white
 tmux_conf_theme_status_right_attr='none,none,bold'
 
 # pairing indicator
@@ -258,6 +267,7 @@ tmux_conf_battery_status_discharging='↓'    # U+2193
 # clock style (when you hit <prefix> + t)
 # you may want to use %I:%M %p in place of %R in tmux_conf_theme_status_right
 tmux_conf_theme_clock_colour='#00afff'  # light blue
+tmux_conf_theme_clock_colour='#DC143C'  # light blue
 tmux_conf_theme_clock_style='24'
 
 
@@ -294,3 +304,25 @@ tmux_conf_copy_to_os_clipboard=false
 
 # move status line to top
 #set -g status-position top
+
+
+
+#
+# NATIVATION
+#
+# ctrl+left/right cycles thru windows
+bind-key -n C-right next
+bind-key -n C-left prev
+#
+# vertical and horizontal split 
+#unbind | #split-window -h
+#unbind - #split-window -v
+bind-key | split-window -h -c "#{pane_current_path}"
+bind-key - split-window -v -c "#{pane_current_path}"
+#
+# Use Alt-arrow keys without prefix key to switch panes
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
